@@ -6,6 +6,12 @@ import { AnimalsModule } from './animals/animals.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './users/users.module';
+import { User } from './users/entities/user.entity';
+import AdminJS from 'adminjs';
+import { Database, Resource } from '@adminjs/typeorm';
+import { AdminModule } from '@adminjs/nestjs';
+
+AdminJS.registerAdapter({ Database, Resource });
 
 @Module({
   imports: [
@@ -21,10 +27,19 @@ import { UsersModule } from './users/users.module';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [],
+        entities: [User],
+        //TODO: Change in production to false
         synchronize: true,
       }),
       inject: [ConfigService],
+    }),
+    AdminModule.createAdminAsync({
+      useFactory: () => ({
+        adminJsOptions: {
+          rootPath: '/admin',
+          resources: [User],
+        },
+      }),
     }),
     UsersModule,
   ],
