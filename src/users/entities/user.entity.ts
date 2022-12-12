@@ -21,4 +21,11 @@ export class User extends BaseEntity {
     default: '',
   })
   password: string;
+
+  @Field()
+  @Column({
+    nullable: false,
+    default: '',
+  })
+  role: string;
 }

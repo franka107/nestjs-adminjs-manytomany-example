@@ -30,9 +30,7 @@ export class AuthService {
   }
 
   generateUserCredential(user: User): LoggedUserOutput {
-    const payload = {
-      email: user.email,
-    };
+    const payload = JSON.parse(JSON.stringify(user));
     return {
       accessToken: this.jwtService.sign(payload),
     };

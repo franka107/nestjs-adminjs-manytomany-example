@@ -15,6 +15,7 @@ import {
   RBAcAsyncPermissions,
   RBAcPermissions,
 } from '../decorators/rbac.permissions.decorator';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class RBAcGuard implements CanActivate {
@@ -24,12 +25,18 @@ export class RBAcGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
+    // const request = context.switchToHttp().getRequest();
+    const request =
+      context.getType() === 'http'
+        ? context.switchToHttp().getRequest()
+        : GqlExecutionContext.create(context).getContext().req;
+
     const user: IRole = request.user;
 
     if (!user) {
       throw new ForbiddenException('Getting user was failed.');
     }
+    console.log(user);
 
     {
       const permAsync = this.rbacAsync(context);

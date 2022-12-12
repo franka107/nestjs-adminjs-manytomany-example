@@ -18,7 +18,7 @@ export class UsersResolver {
     return this.usersService.create(createUserInput);
   }
 
-  @RBAcPermissions('users@update')
+  @RBAcPermissions('users@list')
   @UseGuards(JwtAuthGuard, RBAcGuard)
   @Query(() => [User], { name: 'users' })
   findAll() {
