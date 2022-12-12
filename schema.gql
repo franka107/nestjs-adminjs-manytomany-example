@@ -1,0 +1,40 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  """Example field (placeholder)"""
+  id: String!
+  email: String!
+  password: String!
+}
+
+type LoggedUserOutput {
+  """Generated access_token of the user"""
+  accessToken: String!
+}
+
+type Query {
+  users: [User!]!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  loginUser(logginUserInput: LoginUserInput!): LoggedUserOutput!
+}
+
+input CreateUserInput {
+  """email of the user"""
+  email: String!
+
+  """password of the user"""
+  password: String!
+}
+
+input LoginUserInput {
+  """email of user"""
+  email: String!
+
+  """password of the user"""
+  password: String!
+}
