@@ -7,7 +7,6 @@ import { LoggedUserOutput } from './dto/logged-user.output';
 import { LoginUserInput } from './dto/login-user.input';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/common/auth/jwt-auth.guard';
-import { RBAcGuard, RBAcPermissions } from 'src/rbac';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -18,8 +17,7 @@ export class UsersResolver {
     return this.usersService.create(createUserInput);
   }
 
-  @RBAcPermissions('users@list')
-  @UseGuards(JwtAuthGuard, RBAcGuard)
+  @UseGuards(JwtAuthGuard)
   @Query(() => [User], { name: 'users' })
   findAll() {
     return this.usersService.findAll();

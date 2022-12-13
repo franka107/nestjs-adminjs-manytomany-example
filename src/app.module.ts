@@ -4,11 +4,10 @@ import { AppService } from './app.service';
 import { AnimalsModule } from './animals/animals.module';
 import { UsersModule } from './users/users.module';
 import { CommonModule } from './common/common.module';
-import { RBAcModule } from './rbac';
-import { RBAC } from './common/auth/rbac';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
-  imports: [CommonModule, AnimalsModule, UsersModule, RBAcModule.forRoot(RBAC)],
+  imports: [CommonModule, AnimalsModule, UsersModule, RolesModule],
   controllers: [AppController],
   providers: [AppService],
 })

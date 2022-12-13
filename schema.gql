@@ -15,13 +15,24 @@ type LoggedUserOutput {
   accessToken: String!
 }
 
+type Role {
+  """Id field (placeholder)"""
+  id: String!
+  name: String!
+}
+
 type Query {
   users: [User!]!
+  roles: [Role!]!
+  role(id: Int!): Role!
 }
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   loginUser(logginUserInput: LoginUserInput!): LoggedUserOutput!
+  createRole(createRoleInput: CreateRoleInput!): Role!
+  updateRole(updateRoleInput: UpdateRoleInput!): Role!
+  removeRole(id: Int!): Role!
 }
 
 input CreateUserInput {
@@ -38,4 +49,15 @@ input LoginUserInput {
 
   """password of the user"""
   password: String!
+}
+
+input CreateRoleInput {
+  """Example field (placeholder)"""
+  name: String!
+}
+
+input UpdateRoleInput {
+  """Example field (placeholder)"""
+  name: String
+  id: Int!
 }

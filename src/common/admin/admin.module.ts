@@ -4,6 +4,7 @@ import { Database, Resource } from '@adminjs/typeorm';
 import { AdminModule as NestAdminModule } from '@adminjs/nestjs';
 import { User } from 'src/users/entities/user.entity';
 import * as bcrypt from 'bcrypt';
+import { Role } from 'src/roles/entities/role.entity';
 
 AdminJS.registerAdapter({ Database, Resource });
 
@@ -62,7 +63,8 @@ const userResource: ResourceWithOptions = {
       useFactory: () => ({
         adminJsOptions: {
           rootPath: '/admin',
-          resources: [userResource],
+          resources: [userResource, Role],
+          branding: {},
         },
       }),
     }),
