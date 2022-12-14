@@ -2,17 +2,12 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  """Example field (placeholder)"""
+type Grant {
+  """Id field (placeholder)"""
   id: String!
-  email: String!
-  password: String!
-  role: String!
-}
-
-type LoggedUserOutput {
-  """Generated access_token of the user"""
-  accessToken: String!
+  resource: String!
+  action: String!
+  attributes: String!
 }
 
 type Role {
@@ -21,18 +16,46 @@ type Role {
   name: String!
 }
 
+type User {
+  """Example field (placeholder)"""
+  id: String!
+  email: String!
+  password: String!
+}
+
+type LoggedUserOutput {
+  """Generated access_token of the user"""
+  accessToken: String!
+}
+
 type Query {
+  grants: [Grant!]!
+  grant(id: Int!): Grant!
   users: [User!]!
   roles: [Role!]!
   role(id: Int!): Role!
 }
 
 type Mutation {
+  createGrant(createGrantInput: CreateGrantInput!): Grant!
+  updateGrant(updateGrantInput: UpdateGrantInput!): Grant!
+  removeGrant(id: Int!): Grant!
   createUser(createUserInput: CreateUserInput!): User!
   loginUser(logginUserInput: LoginUserInput!): LoggedUserOutput!
   createRole(createRoleInput: CreateRoleInput!): Role!
   updateRole(updateRoleInput: UpdateRoleInput!): Role!
   removeRole(id: Int!): Role!
+}
+
+input CreateGrantInput {
+  """Example field (placeholder)"""
+  exampleField: Int!
+}
+
+input UpdateGrantInput {
+  """Example field (placeholder)"""
+  exampleField: Int
+  id: Int!
 }
 
 input CreateUserInput {

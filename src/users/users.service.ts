@@ -23,6 +23,7 @@ export class UsersService {
     const newUser = this.usersRepository.save({
       email: createUserInput.email,
       password: createUserInput.password,
+      roles: [{ id: 'a62a7577-2a88-4727-9142-89fdd9b3319f' }],
     });
     return newUser;
   }
