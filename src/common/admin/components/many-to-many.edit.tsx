@@ -7,9 +7,7 @@ import {
 } from '@adminjs/design-system';
 import {
   ApiClient,
-  EditPropertyProps,
   EditPropertyPropsInArray,
-  PropertyLabel,
   RecordJSON,
   SelectRecord,
 } from 'adminjs';
@@ -17,7 +15,7 @@ import { unflatten } from 'flat';
 
 type CombinedProps = EditPropertyPropsInArray;
 type SelectRecordEnhanced = SelectRecord & {
-  record: RecordJSON;
+  // record: RecordJSON;
 };
 
 const EditManyToManyInput: FC<CombinedProps> = (props) => {
@@ -33,7 +31,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
     if (selected) {
       onChange(
         property.path,
-        selected.map((s) => ({ id: s.value })),
+        selected.map((option) => ({ id: option.value })),
       );
     } else {
       onChange(property.path, null);
@@ -49,24 +47,15 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
       resourceId,
       query: inputValue,
     });
-    console.log(
-      '🚀 ~ file: many-to-many.edit.tsx:52 ~ optionRecords',
-      optionRecords,
-    );
 
     return optionRecords.map((optionRecord: RecordJSON) => ({
       value: optionRecord.id,
       label: optionRecord.title,
-      record: optionRecord,
     }));
   };
   const error = record?.errors[property.path];
 
   const selectedValues = unflatten(record.params)[property.path] || [];
-  console.log(
-    '🚀 ~ file: many-to-many.edit.tsx:69 ~ //handleChange ~ unflattenParams',
-    selectedValues,
-  );
 
   const selectedId = record?.params[property.path] as string | undefined;
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>();
@@ -79,21 +68,6 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
   const [selectedOptions, setSelectedOptions] = useState(
     selectedValuesToOptions,
   );
-  console.log(
-    '🚀 ~ file: many-to-many.edit.tsx:81 ~ //handleChange ~ selectedOptions',
-    selectedOptions,
-  );
-
-  // const selectedOption =
-  //   selectedId && selectedValue
-  //     ? {
-  //         value: selectedValue.id,
-  //         label: selectedValue.title,
-  //       }
-  //     : {
-  //         value: '',
-  //         label: '',
-  //       };
 
   useEffect(() => {
     if (!selectedValue && selectedId) {
@@ -116,7 +90,6 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
 
   return (
     <FormGroup error={Boolean(error)}>
-      {/* <PropertyLabel property={property} /> */}
       <Label>{property.label}</Label>
       <SelectAsync
         isMulti

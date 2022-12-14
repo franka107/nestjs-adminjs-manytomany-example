@@ -1,4 +1,9 @@
-import { RecordActionResponse, ActionRequest, ActionContext } from 'adminjs';
+import {
+  RecordActionResponse,
+  ActionRequest,
+  ActionContext,
+  ResourceOptions,
+} from 'adminjs';
 import { unflatten } from 'flat';
 import { CustomResource } from '../admin.resource';
 import { Components } from '../components';
@@ -131,6 +136,22 @@ export const manyToManyComponent = (reference: string) => ({
   isArray: true,
   reference: reference,
   components: {
+    show: Components.ManyToManyShow,
     edit: Components.ManyToManyEdit,
+    list: Components.ManyToManyList,
   },
 });
+
+export const injectManyToManySupport = (
+  options: ResourceOptions,
+  properties: { propertyName: string; modelClassName: string }[],
+): ResourceOptions => {
+  properties.forEach((propForSupport) => {
+    options.properties[propForSupport.propertyName] = manyToManyComponent(
+      propForSupport.modelClassName,
+    );
+    options.actions.new.after = [after];
+    options.actions.edit.after = [after];
+  });
+  return options;
+};

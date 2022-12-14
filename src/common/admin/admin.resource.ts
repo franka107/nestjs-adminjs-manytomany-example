@@ -47,9 +47,9 @@ export class CustomResource extends TypeOrmResource {
   //   return new this.SequelizeModel(record.params, { isNewRecord: false });
   // }
 
-  async saveRecords(record, resourceId, ids) {
+  async saveRecords(record, resourceId, ids: { id: string | number }[]) {
     await this.update(record.params.id, {
-      [resourceId]: ids.map((id) => ({ id: id.id })),
+      [resourceId]: ids.map((value) => ({ id: value.id })),
     });
 
     // const instance = this.getInstance(record);
@@ -65,7 +65,6 @@ export class CustomResource extends TypeOrmResource {
     return this.decorate()
       .getProperties({ where: 'edit' })
       .filter((p: any) => {
-        console.log(p.type());
         return p.type() === 'reference';
       })
       .map((p) => p.reference());
@@ -75,7 +74,6 @@ export class CustomResource extends TypeOrmResource {
     return this.decorate()
       .getProperties({ where: 'edit' })
       .filter((p: any) => {
-        console.log(p.type());
         return p.type() === 'reference';
       })
       .map((p) => p.name());
