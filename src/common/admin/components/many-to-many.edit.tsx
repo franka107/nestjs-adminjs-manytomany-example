@@ -22,22 +22,18 @@ type SelectRecordEnhanced = SelectRecord & {
 
 const EditManyToManyInput: FC<CombinedProps> = (props) => {
   const { onChange, property, record } = props;
-  console.log('🚀 ~ file: many-to-many.edit.tsx:24 ~ props', props);
-  // console.log('🚀 ~ file: many-to-many.edit.tsx:23 ~ property', property);
   const { reference: resourceId } = property;
-  // const resourceId = 'Role';
 
   if (!resourceId) {
     throw new Error(`Cannot reference resource in property '${property.path}'`);
   }
 
-  // const handleChange = (selected: SelectRecordEnhanced): void => {
   const handleChange = (selected: any[]): void => {
+    setSelectedOptions(selected);
     if (selected) {
-      // onChange(property.path, selected.value, selected.record);
       onChange(
         property.path,
-        selected.map((v) => v.value),
+        selected.map((s) => ({ id: s.value })),
       );
     } else {
       onChange(property.path, null);
@@ -54,9 +50,10 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
       query: inputValue,
     });
     console.log(
-      '🚀 ~ file: many-to-many.edit.tsx:55 ~ //handleChange ~ optionRecords',
+      '🚀 ~ file: many-to-many.edit.tsx:52 ~ optionRecords',
       optionRecords,
     );
+
     return optionRecords.map((optionRecord: RecordJSON) => ({
       value: optionRecord.id,
       label: optionRecord.title,
@@ -65,26 +62,38 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
   };
   const error = record?.errors[property.path];
 
-  const unflattenParams = unflatten(record.params)[property.path];
+  const selectedValues = unflatten(record.params)[property.path] || [];
   console.log(
     '🚀 ~ file: many-to-many.edit.tsx:69 ~ //handleChange ~ unflattenParams',
-    unflattenParams,
+    selectedValues,
   );
 
   const selectedId = record?.params[property.path] as string | undefined;
   const [loadedRecord, setLoadedRecord] = useState<RecordJSON | undefined>();
   const [loadingRecord, setLoadingRecord] = useState(0);
   const selectedValue = record?.populated[property.path] ?? loadedRecord;
-  const selectedOption =
-    selectedId && selectedValue
-      ? {
-          value: selectedValue.id,
-          label: selectedValue.title,
-        }
-      : {
-          value: '',
-          label: '',
-        };
+  const selectedValuesToOptions = selectedValues.map((selectedValue) => ({
+    value: selectedValue.id,
+    label: selectedValue.name,
+  }));
+  const [selectedOptions, setSelectedOptions] = useState(
+    selectedValuesToOptions,
+  );
+  console.log(
+    '🚀 ~ file: many-to-many.edit.tsx:81 ~ //handleChange ~ selectedOptions',
+    selectedOptions,
+  );
+
+  // const selectedOption =
+  //   selectedId && selectedValue
+  //     ? {
+  //         value: selectedValue.id,
+  //         label: selectedValue.title,
+  //       }
+  //     : {
+  //         value: '',
+  //         label: '',
+  //       };
 
   useEffect(() => {
     if (!selectedValue && selectedId) {
@@ -97,10 +106,6 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
           recordId: selectedId,
         })
         .then(({ data }: any) => {
-          console.log(
-            '🚀 ~ file: many-to-many.edit.tsx:89 ~ .then ~ data',
-            data,
-          );
           setLoadedRecord(data.record);
         })
         .finally(() => {
@@ -116,7 +121,7 @@ const EditManyToManyInput: FC<CombinedProps> = (props) => {
       <SelectAsync
         isMulti
         cacheOptions
-        value={selectedOption}
+        value={selectedOptions}
         defaultOptions
         loadOptions={loadOptions}
         onChange={handleChange}
